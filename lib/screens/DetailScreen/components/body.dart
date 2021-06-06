@@ -1,6 +1,7 @@
 import 'package:mi_carwa_vendor/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:mi_carwa_vendor/screens/SelectDayDateScreen/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -278,7 +279,16 @@ class _MyAppState extends State<MyApp> {
                                         'Book Now',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      onPressed: () => debugPrint('hello'),
+                                      onPressed: () => {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return SelectDayDate();
+                                            },
+                                          ),
+                                        ),
+                                      },
                                     ),
                                   ),
                                 ),

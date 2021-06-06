@@ -4,6 +4,7 @@ const kPrimaryColor = Color(0xFF43a3ad);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kPrimaryLight = Color(0xFF979797);
 const kPrimaryMatch = Color(0xFFD4C2E4);
+const kpurpleColor = Color(0xFF7746CA);
 
 //subcategory screen
 
