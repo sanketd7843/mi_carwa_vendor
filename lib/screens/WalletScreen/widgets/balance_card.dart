@@ -1,8 +1,8 @@
 import 'package:mi_carwa_vendor/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/Screens/WalletScreen/theme/light_color.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mi_carwa_vendor/screens/ReferAndEarn/refer_and_earn.dart';
+import 'package:flutter/material.dart';
+import 'package:mi_carwa_vendor/screens/WalletScreen/theme/light_color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({Key key}) : super(key: key);
@@ -17,27 +17,7 @@ class BalanceCard extends StatelessWidget {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * .27,
-              decoration: BoxDecoration(
-                gradient: new LinearGradient(
-                    colors: [
-                      kMainPageGradientLight,
-                      kMainPageGradientDark,
-                    ],
-                    begin: const FractionalOffset(0.0, 1.0),
-                    end: const FractionalOffset(1.0, 1.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp),
-                color: kWhiteColor,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: kTenBlackColor,
-                    blurRadius: 10,
-                    spreadRadius: 5,
-                    offset: Offset(8.0, 8.0),
-                  )
-                ],
-              ),
+              color: LightColor.black,
               child: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
@@ -50,7 +30,7 @@ class BalanceCard extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: kWhiteColor),
+                            color: LightColor.lightNavyBlue),
                       ),
                       SizedBox(height: 10),
                       Row(
@@ -58,44 +38,44 @@ class BalanceCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             '6,354',
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.mulish(
                                 textStyle: Theme.of(context).textTheme.display1,
                                 fontSize: 35,
                                 fontWeight: FontWeight.w800,
-                                color: kWhiteColor),
+                                color: kPrimaryColor),
                           ),
                           Text(
                             ' ₹',
                             style: TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.w500,
-                                color: kWhiteColor.withAlpha(200)),
+                                color: kPrimaryColor.withAlpha(200)),
                           ),
                         ],
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                          width: 85,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                              border:
-                                  Border.all(color: Colors.white, width: 1)),
-                          child: GestureDetector(
-                            onTap: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ReferAndEarnScreen();
-                                  },
-                                ),
-                              ),
-                            },
+                      GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ReferAndEarnScreen();
+                              },
+                            ),
+                          ),
+                        },
+                        child: Container(
+                            width: 85,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 5),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                border:
+                                    Border.all(color: Colors.white, width: 1)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -105,13 +85,45 @@ class BalanceCard extends StatelessWidget {
                                   size: 20,
                                 ),
                                 SizedBox(width: 5),
-                                Text("Top up",
+                                Text("Refer",
                                     style: TextStyle(color: Colors.white)),
                               ],
-                            ),
-                          ))
+                            )),
+                      )
                     ],
                   ),
+                  Positioned(
+                    left: -170,
+                    top: -170,
+                    child: CircleAvatar(
+                      radius: 130,
+                      backgroundColor: kPrimaryColor,
+                    ),
+                  ),
+                  Positioned(
+                    left: -160,
+                    top: -190,
+                    child: CircleAvatar(
+                      radius: 130,
+                      backgroundColor: kPrimaryLightColor,
+                    ),
+                  ),
+                  Positioned(
+                    right: -170,
+                    bottom: -170,
+                    child: CircleAvatar(
+                      radius: 130,
+                      backgroundColor: kPrimaryColor,
+                    ),
+                  ),
+                  Positioned(
+                    right: -160,
+                    bottom: -190,
+                    child: CircleAvatar(
+                      radius: 130,
+                      backgroundColor: kPrimaryLightColor,
+                    ),
+                  )
                 ],
               ),
             )),

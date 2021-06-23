@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:mi_carwa_vendor/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/theme.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/theme.dart';
 
 class BubbleIndicatorPainter extends CustomPainter {
   BubbleIndicatorPainter(

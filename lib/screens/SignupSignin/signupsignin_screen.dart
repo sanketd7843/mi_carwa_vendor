@@ -1,4 +1,4 @@
-import 'package:mi_carwa_vendor/Screens/SignupSignin/pages/login_page.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,7 +17,7 @@ class SignUpSignup extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'TheGorgeousLogin',
+      title: 'Login',
       home: LoginPage(),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/Screens/WalletScreen/theme/light_color.dart';
+import 'package:mi_carwa_vendor/screens/WalletScreen/theme/light_color.dart';
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({Key key}) : super(key: key);

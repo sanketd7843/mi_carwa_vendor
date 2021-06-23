@@ -1,11 +1,8 @@
 import 'package:mi_carwa_vendor/constants.dart';
 import 'package:mi_carwa_vendor/model/history_model.dart';
-import 'package:mi_carwa_vendor/screens/ReferAndEarn/refer_and_earn.dart';
-import 'package:mi_carwa_vendor/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/Screens/WalletScreen/theme/light_color.dart';
-import 'package:mi_carwa_vendor/Screens/WalletScreen/widgets/balance_card.dart';
-import 'package:mi_carwa_vendor/Screens/WalletScreen/widgets/title_text.dart';
+import 'package:mi_carwa_vendor/screens/TransactionsScreen/TransactionsScreen.dart';
+import 'package:mi_carwa_vendor/screens/WalletScreen/widgets/balance_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -18,13 +15,15 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
+    var h = MediaQuery.of(context).size.height;
+    var w = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
         title: new Text(
-          "Wallet",
-          textAlign: TextAlign.center,
+          'Wallet Screen',
           style: TextStyle(color: Colors.grey.shade700),
         ),
         leading: IconButton(
@@ -48,16 +47,44 @@ class _WalletScreenState extends State<WalletScreen> {
 
               BalanceCard(),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(28.0, 48.0, 28.0, 0.0),
-                child: Text(
-                  "Past 3 Transactions",
-                  style: TextStyle(
-                    color: kPrimaryColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(28.0, 48.0, 28.0, 0.0),
+                    child: Text(
+                      "Past 3 Transactions",
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return TransactionsScreen();
+                          },
+                        ),
+                      ),
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(28.0, 48.0, 28.0, 0.0),
+                      child: Text(
+                        "More",
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               ListView.builder(

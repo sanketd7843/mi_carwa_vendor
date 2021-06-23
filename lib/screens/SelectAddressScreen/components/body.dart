@@ -1,12 +1,56 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:mi_carwa_vendor/components/rounded_button.dart';
+import 'package:mi_carwa_vendor/constants.dart';
+import 'package:mi_carwa_vendor/constants/sharedHelpers.dart';
+import 'package:mi_carwa_vendor/models/userLoginModels/UserLoginModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mi_carwa_vendor/components/default_button.dart';
-import 'package:mi_carwa_vendor/constants.dart';
-import 'package:mi_carwa_vendor/main.dart';
-import 'package:mi_carwa_vendor/screens/HomeScreen/home_screen.dart';
-import 'package:mi_carwa_vendor/screens/ProfileScreen/profile_screen.dart';
+import 'package:mi_carwa_vendor/screens/PaymentDoneScreen/PaymentDoneScreen.dart';
 
-class Body extends StatelessWidget {
+class SelectAddressScreenBody extends StatefulWidget {
+  final String shopName;
+  final String shopId;
+  final String shopAddress;
+  final String shopContactNumber;
+  final String shopOpeningTime;
+  final String shopClosingTime;
+  final String shopDescription;
+  final String vendorId;
+  final String dateTime;
+
+  const SelectAddressScreenBody(
+      {Key key,
+      this.shopName,
+      this.shopId,
+      this.shopAddress,
+      this.shopContactNumber,
+      this.shopOpeningTime,
+      this.shopClosingTime,
+      this.shopDescription,
+      this.vendorId,
+      this.dateTime})
+      : super(key: key);
+
+  @override
+  _SelectAddressScreenBody createState() => _SelectAddressScreenBody();
+}
+
+class _SelectAddressScreenBody extends State<SelectAddressScreenBody> {
+  String dd;
+  String userId = "";
+  sharedHelpers sharedHelper = sharedHelpers();
+
+  void getUsersData() async {
+    dd = await sharedHelper.getSharedPreferenceValue("userData");
+
+    UserData udata = UserData.fromJson(json.decode(dd));
+    setState(() {
+      userId = udata.id.toString();
+    });
+    log("data user id" + userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -16,7 +60,7 @@ class Body extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade100,
         title: new Text(
           'Select Address',
           style: TextStyle(color: Colors.grey.shade700),
@@ -28,210 +72,258 @@ class Body extends StatelessWidget {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Center(
-                child: Container(
-                  height: h * 0.4,
-                  width: w * 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: <Widget>[
+      body: Container(
+        height: h * 1,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Center(
+              child: Container(
+                width: w * 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Column(
+                          children: [
+                            Image.asset(
+                              "assets/address.png",
+                              height: size.height * 0.25,
+                              width: w * 1,
+                            ),
+                            Text(
+                              "Select Existing Address",
+                              style: GoogleFonts.inter(
+                                  fontSize: h * 0.030,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10, top: 30.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, left: 5.0),
+                              child: Checkbox(
+                                value: true,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, left: 20.0),
+                              child: Icon(
+                                Icons.pin_drop,
+                                color: Colors.black54,
+                              ),
+                            ),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset(
-                                  "assets/images/address.png",
-                                  height: size.height * 0.30,
-                                  width: w * 1,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 10.0),
+                                  child: Text(
+                                    "Office",
+                                    style: GoogleFonts.inter(
+                                        fontSize: h * 0.020,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.blue.shade600),
+                                  ),
                                 ),
-                                Text(
-                                  "Select Your Address",
-                                  style: GoogleFonts.inter(
-                                      fontSize: h * 0.030,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black54),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 4.0),
+                                  child: Text(
+                                    "2, Sri Apartment, Nagpur, 440016",
+                                    style: GoogleFonts.inter(
+                                        fontSize: h * 0.020,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade600),
+                                  ),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 20.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(
-                            'Address 1',
-                            style: TextStyle(
-                                fontSize: 22.0,
-                                color: kPrimaryColor,
-                                fontFamily: 'Cocon-Regular-Font',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 0.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Flexible(
-                        child: new TextField(
-                          decoration: const InputDecoration(
-                            hintText: "Plot no 1, HighDeal Society",
-                          ),
+                        SizedBox(
+                          height: 8,
                         ),
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 20.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(
-                            'Address 2',
-                            style: TextStyle(
-                                fontSize: 22.0,
-                                color: kPrimaryColor,
-                                fontFamily: 'Cocon-Regular-Font',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 0.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Flexible(
-                        child: new TextField(
-                          decoration: const InputDecoration(
-                            hintText: "CivilLines",
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, left: 5.0),
+                              child: Checkbox(
+                                value: false,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, left: 20.0),
+                              child: Icon(
+                                Icons.pin_drop,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 10.0),
+                                  child: Text(
+                                    "${widget.shopId}",
+                                    style: GoogleFonts.inter(
+                                        fontSize: h * 0.020,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.blue.shade600),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 4.0),
+                                  child: Text(
+                                    "2, Sri Apartment, Nagpur, 440016",
+                                    style: GoogleFonts.inter(
+                                        fontSize: h * 0.020,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade600),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 20.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(
-                            'City',
-                            style: TextStyle(
-                                fontSize: 22.0,
-                                color: kPrimaryColor,
-                                fontFamily: 'Cocon-Regular-Font',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 0.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Flexible(
-                        child: new TextField(
-                          decoration: const InputDecoration(
-                            hintText: "Nagpur",
-                          ),
+                        SizedBox(
+                          height: 8,
                         ),
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 20.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(
-                            'State',
-                            style: TextStyle(
-                                fontSize: 22.0,
-                                color: kPrimaryColor,
-                                fontFamily: 'Cocon-Regular-Font',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 0.0),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      new Flexible(
-                        child: new TextField(
-                          decoration: const InputDecoration(
-                            hintText: "Maharashtra",
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, left: 5.0),
+                              child: Checkbox(
+                                value: false,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, left: 20.0),
+                              child: Icon(
+                                Icons.pin_drop,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 10.0),
+                                  child: Text(
+                                    "Office",
+                                    style: GoogleFonts.inter(
+                                        fontSize: h * 0.020,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.blue.shade600),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 4.0),
+                                  child: Text(
+                                    "2, Sri Apartment, Nagpur, 440016",
+                                    style: GoogleFonts.inter(
+                                        fontSize: h * 0.020,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade600),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  )),
-              Container(height: 23),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(28.0, 8.0, 28.0, 8.0),
-                // ignore: deprecated_member_use
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  color: kPrimaryColor,
-                  //onPressed: press,
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Book My Slot',
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ), //bookMySlotButton
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(28.0, 18.0, 28.0, 0.0),
+                    // ignore: deprecated_member_use
+                    child: RoundedButton(
+                      text: "Done",
+                      color: kPrimaryColor,
+                      textColor: Colors.white,
+                      press: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PaymentModeScreen(
+                                shopAddress: widget.shopAddress,
+                                shopClosingTime: widget.shopAddress,
+                                shopContactNumber: widget.shopAddress,
+                                shopDescription: widget.shopDescription,
+                                shopId: widget.shopId,
+                                shopName: widget.shopName,
+                                shopOpeningTime: widget.shopAddress,
+                                vendorId: widget.vendorId,
+                                dateTime: widget.dateTime,
+                                userId: userId,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    getUsersData();
   }
 }

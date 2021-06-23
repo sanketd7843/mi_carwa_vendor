@@ -2,10 +2,10 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:mi_carwa_vendor/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/screens/AcceptedScreen/accepted_screen.dart';
-import 'package:mi_carwa_vendor/screens/CanceledScreen/canceled_screen.dart';
 import 'package:mi_carwa_vendor/screens/NearbyScreen/nearby_screen.dart';
-import 'package:mi_carwa_vendor/screens/ShopsScreen/pending_screen.dart';
+import 'package:mi_carwa_vendor/screens/OrderCancelledScreen/components/cancelledScreenBody.dart';
+import 'package:mi_carwa_vendor/screens/OrderScreen/components/body.dart';
+import 'package:mi_carwa_vendor/screens/ShopsScreen/shops_screen.dart';
 import 'package:mi_carwa_vendor/screens/ProfileScreen/profile_screen.dart';
 import 'package:mi_carwa_vendor/screens/WalletScreen/WalletScreen.dart';
 
@@ -32,8 +32,8 @@ class _MyPackageState extends State<MyPackage> {
   int currentTab = 0; // to keep track of active tab index
   final List<Widget> screens = [
     NearbyScreen(),
-    AcceptedScreen(),
-    CanceledScreen(),
+    OrderScreenBody(),
+    CancelledScreenBody(),
     ShopsScreen(),
     ProfileScreen(),
   ]; // to store nested tabs
@@ -104,7 +104,7 @@ class _MyPackageState extends State<MyPackage> {
                     onPressed: () {
                       setState(() {
                         currentScreen =
-                            AcceptedScreen(); // if user taps on this dashboard tab will be active
+                            OrderScreenBody(); // if user taps on this dashboard tab will be active
                         currentTab = 1;
                       });
                     },

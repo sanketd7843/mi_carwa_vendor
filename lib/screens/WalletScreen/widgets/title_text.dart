@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/Screens/WalletScreen/theme/light_color.dart';
+import 'package:mi_carwa_vendor/screens/WalletScreen/theme/light_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TitleText extends StatelessWidget {
@@ -15,7 +15,7 @@ class TitleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.mulish(
             fontSize: fontSize, fontWeight: FontWeight.w800, color: color));
   }
 }

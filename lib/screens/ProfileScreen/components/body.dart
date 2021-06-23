@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mi_carwa_vendor/constants.dart';
 import 'package:mi_carwa_vendor/screens/EditProfileScreen/edit_profile_screen.dart';
+import 'package:mi_carwa_vendor/screens/EditShopInformationScreen/edit_shop_information_screen.dart';
+import 'package:mi_carwa_vendor/screens/KycDoneScreen/KycDoneScreen.dart';
+import 'package:mi_carwa_vendor/screens/OrderAcceptDenyScreen/order_detail_screen.dart';
 import 'package:mi_carwa_vendor/screens/ReferAndEarn/refer_and_earn.dart';
+import 'package:mi_carwa_vendor/screens/SelectImageAadhar/SelectImageAadhar.dart';
 import 'package:mi_carwa_vendor/screens/WalletScreen/WalletScreen.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -11,12 +15,12 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: kWhiteColor,
-        title: Center(
-            child: Text(
+        title: Text(
           'Profile',
           style: TextStyle(color: kPrimaryColor),
-        )),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -37,13 +41,27 @@ class Body extends StatelessWidget {
               SizedBox(height: 20),
               ProfileMenu(
                 text: 'Shop Description',
+                icon: "assets/icons/pin.png",
+                press: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return EditShopInformationScreen();
+                      },
+                    ),
+                  ),
+                },
+              ),
+              ProfileMenu(
+                text: 'KYC',
                 icon: "assets/icons/key.png",
                 press: () => {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return EditProfileScreen();
+                        return SelectAadahrCard();
                       },
                     ),
                   ),
@@ -57,7 +75,7 @@ class Body extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return WalletScreen();
+                        return OrderAcceptDenyScreen();
                       },
                     ),
                   );

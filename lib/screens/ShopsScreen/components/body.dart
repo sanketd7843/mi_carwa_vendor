@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mi_carwa_vendor/model/transaction_model.dart';
 import 'package:mi_carwa_vendor/screens/DetailScreen/detail_screen.dart';
-import 'package:mi_carwa_vendor/screens/ReferAndEarn/refer_and_earn.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Body extends StatefulWidget {

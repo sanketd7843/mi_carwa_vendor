@@ -1,18 +1,16 @@
 import 'package:mi_carwa_vendor/constants.dart';
-import 'package:mi_carwa_vendor/model/history_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:mi_carwa_vendor/screens/CanceledScreen/canceled_screen.dart';
-import 'package:mi_carwa_vendor/screens/ShopsScreen/pending_screen.dart';
+import 'package:mi_carwa_vendor/screens/OrderAcceptedScreen/components/acceptedScreenBody.dart';
+import 'package:mi_carwa_vendor/screens/OrderCancelledScreen/components/cancelledScreenBody.dart';
+import 'package:mi_carwa_vendor/screens/OrderPendingScreen/components/pendingScreenBody.dart';
 
-class Body extends StatefulWidget {
+class OrderScreenBody extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<Body> {
+class _HomeScreenState extends State<OrderScreenBody> {
   // Current selected
   int current = 0;
 
@@ -23,7 +21,7 @@ class _HomeScreenState extends State<Body> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: kWhiteColor,
+            backgroundColor: Colors.white,
             title: Center(
                 child: Text(
               'Orders',
@@ -40,9 +38,9 @@ class _HomeScreenState extends State<Body> {
           ),
           body: TabBarView(
             children: [
-              CanceledScreen(),
-              CanceledScreen(),
-              CanceledScreen(),
+              CancelledScreenBody(),
+              PendingScreenBody(),
+              AcceptedScreenBody(),
             ],
           ),
         ),

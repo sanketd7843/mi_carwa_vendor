@@ -1,9 +1,18 @@
-import 'package:mi_carwa_vendor/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/theme.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/widgets/snackbar.dart';
+import 'dart:developer';
+import 'dart:convert';
+import 'package:mi_carwa_vendor/constants/alertHelper.dart';
+import 'package:mi_carwa_vendor/constants/appStringsHelper.dart';
+import 'package:mi_carwa_vendor/constants/sharedHelpers.dart';
+import 'package:mi_carwa_vendor/constants/validatorHelper.dart';
 import 'package:mi_carwa_vendor/screens/HomeScreen/home_screen.dart';
+import 'package:mi_carwa_vendor/constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mi_carwa_vendor/constants/apiUrls.dart';
+import 'package:mi_carwa_vendor/models/userLoginModels/UserLoginModel.dart';
+import 'package:mi_carwa_vendor/networking/HttpService.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/widgets/snackbar.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key key}) : super(key: key);
@@ -13,8 +22,68 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  HttpService httpService = HttpService();
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
+  bool isLoading = false;
+  String fcm_k;
+  sharedHelpers sharedHelper = sharedHelpers();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  Future loginUser() async {
+    _firebaseMessaging.getToken().then((String fcm) => fcm_k = fcm);
+    log("hello fcmkey" + fcm_k);
+    var umail = loginEmailController.text;
+    var upassword = loginPasswordController.text;
+
+    if (umail == "" ||
+        upassword == "" ||
+        !(validatorHelper().validateEmail(umail))) {
+      var dialog = CustomAlertDialog(
+          title: "Alert",
+          message: appStringsHelper.emptyFields,
+          negativeBtnText: 'Ok');
+      showDialog(context: context, builder: (BuildContext context) => dialog);
+    } else {
+      isLoading = true;
+      try {
+        FormData formData = FormData.fromMap({
+          "email": umail,
+          "password": upassword,
+          "api_key": apiUrls.apiKey,
+          "user_type": "1",
+          "fcm_key": fcm_k
+        });
+        isLoading = false;
+        Response resp = await Dio().post(apiUrls.loginUrl, data: formData);
+        UserLoginModel u = UserLoginModel.fromJson(json.decode(resp.data));
+        log(u.response + u.message);
+        if (u.response == "200") {
+          List<UserData> udata = u.data;
+          log("hello world" + json.encode(udata[0]));
+          saveUserData(udata[0]);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => HomeScreen()));
+        } else {
+          var dialog = CustomAlertDialog(
+              title: "Alert", message: u.message, negativeBtnText: 'Ok');
+          showDialog(
+              context: context, builder: (BuildContext context) => dialog);
+        }
+      } on DioError catch (e) {
+        log(e.toString());
+      }
+    }
+  }
+
+  void saveUserData(dynamic data) async {
+    sharedHelper.saveSharedPreferencesValue("userData", json.encode(data));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   final FocusNode focusNodeEmail = FocusNode();
   final FocusNode focusNodePassword = FocusNode();
@@ -30,6 +99,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    bool isApiCallProcess = false;
     return Container(
       padding: const EdgeInsets.only(top: 43.0),
       child: Column(
@@ -113,7 +183,7 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                           onSubmitted: (_) {
-                            _toggleSignInButton();
+                            loginUser();
                           },
                           textInputAction: TextInputAction.go,
                         ),
@@ -122,6 +192,12 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ),
+              isLoading == true
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(child: CircularProgressIndicator()))
+                  : Container(),
               Container(
                 margin: const EdgeInsets.only(top: 170.0),
                 decoration: const BoxDecoration(
@@ -141,28 +217,20 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 child: MaterialButton(
-                  child: const Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
-                    child: Text(
-                      'LOGIN',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontFamily: 'WorkSansBold'),
-                    ),
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return HomeScreen();
-                        },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 42.0),
+                      child: Text(
+                        'LOGIN',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontFamily: 'WorkSansBold'),
                       ),
                     ),
-                  },
-                ),
+                    onPressed: () => {
+                          loginUser(),
+                        }),
               )
             ],
           ),
@@ -179,109 +247,14 @@ class _SignInState extends State<SignIn> {
                       fontFamily: 'WorkSansMedium'),
                 )),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 10.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: <Widget>[
-          //       Container(
-          //         decoration: const BoxDecoration(
-          //           gradient: LinearGradient(
-          //               colors: <Color>[
-          //                 Colors.white10,
-          //                 Colors.white,
-          //               ],
-          //               begin: FractionalOffset(0.0, 0.0),
-          //               end: FractionalOffset(1.0, 1.0),
-          //               stops: <double>[0.0, 1.0],
-          //               tileMode: TileMode.clamp),
-          //         ),
-          //         width: 100.0,
-          //         height: 1.0,
-          //       ),
-          //       const Padding(
-          //         padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          //         child: Text(
-          //           'Or',
-          //           style: TextStyle(
-          //               color: Colors.white,
-          //               fontSize: 16.0,
-          //               fontFamily: 'WorkSansMedium'),
-          //         ),
-          //       ),
-          //       Container(
-          //         decoration: const BoxDecoration(
-          //           gradient: LinearGradient(
-          //               colors: <Color>[
-          //                 Colors.white,
-          //                 Colors.white10,
-          //               ],
-          //               begin: FractionalOffset(0.0, 0.0),
-          //               end: FractionalOffset(1.0, 1.0),
-          //               stops: <double>[0.0, 1.0],
-          //               tileMode: TileMode.clamp),
-          //         ),
-          //         width: 100.0,
-          //         height: 1.0,
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: <Widget>[
-          //     Padding(
-          //       padding: const EdgeInsets.only(top: 10.0, right: 40.0),
-          //       child: GestureDetector(
-          //         onTap: () => CustomSnackBar(
-          //             context, const Text('Facebook button pressed')),
-          //         child: Container(
-          //           padding: const EdgeInsets.all(15.0),
-          //           decoration: const BoxDecoration(
-          //             shape: BoxShape.circle,
-          //             color: Colors.white,
-          //           ),
-          //           child: const Icon(
-          //             FontAwesomeIcons.facebookF,
-          //             color: Color(0xFF0084ff),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: const EdgeInsets.only(top: 10.0),
-          //       child: GestureDetector(
-          //         onTap: () => CustomSnackBar(
-          //             context, const Text('Google button pressed')),
-          //         child: Container(
-          //           padding: const EdgeInsets.all(15.0),
-          //           decoration: const BoxDecoration(
-          //             shape: BoxShape.circle,
-          //             color: Colors.white,
-          //           ),
-          //           child: const Icon(
-          //             FontAwesomeIcons.google,
-          //             color: Color(0xFF0084ff),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     );
   }
 
-  void _toggleSignInButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return HomeScreen();
-        },
-      ),
-    );
+  @override
+  void init() {
+    super.initState();
   }
 
   void _toggleLogin() {

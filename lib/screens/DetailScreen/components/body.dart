@@ -1,21 +1,43 @@
 import 'package:mi_carwa_vendor/constants.dart';
+import 'package:mi_carwa_vendor/screens/SelectDayDateScreen/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:mi_carwa_vendor/screens/SelectDayDateScreen/main.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: MyApp(),
+    home: DetailScreenBody(),
   ));
 }
 
-class MyApp extends StatefulWidget {
+class DetailScreenBody extends StatefulWidget {
+  final String shopName;
+  final String shopId;
+  final String shopAddress;
+  final String shopContactNumber;
+  final String shopOpeningTime;
+  final String shopClosingTime;
+  final String shopDescription;
+  final String vendorId;
+
+  const DetailScreenBody(
+      {Key key,
+      this.shopName,
+      this.shopId,
+      this.shopAddress,
+      this.shopContactNumber,
+      this.shopOpeningTime,
+      this.shopClosingTime,
+      this.shopDescription,
+      this.vendorId})
+      : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  _DetailScreenBodyState createState() => _DetailScreenBodyState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _DetailScreenBodyState extends State<DetailScreenBody> {
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
@@ -23,9 +45,24 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          title: new Text(
+            'Vendor Detail',
+            style: TextStyle(color: Colors.grey.shade700),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         body: SingleChildScrollView(
           child: SafeArea(
             child: Container(
+              height: h * 1,
               color: Colors.grey.shade100,
               child: Column(
                 children: [
@@ -41,48 +78,17 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.only(
-                          left: 15.0,
-                          right: 15.0,
-                          top: 20.0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: kPrimaryColor,
-                                size: 32,
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.share,
-                                color: kPrimaryColor,
-                                size: 32,
-                              ),
-                              onPressed: () => debugPrint('upload pressed'),
-                            )
-                          ],
-                        ),
-                      ),
                       Center(
                         child: Container(
                           margin: EdgeInsets.only(top: 215),
                           height: 65,
                           width: 65,
-                          child: Center(
-                            child: Text(
-                              'A',
-                              style: TextStyle(
-                                  fontSize: h * 0.07,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
                           decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images/car.png',
+                              ),
+                            ),
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             boxShadow: [
                               BoxShadow(
@@ -105,7 +111,7 @@ class _MyAppState extends State<MyApp> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Alex Car Washing',
+                            widget.shopName,
                             style: TextStyle(
                                 fontSize: 28, fontWeight: FontWeight.w700),
                           ),
@@ -191,7 +197,7 @@ class _MyAppState extends State<MyApp> {
                       top: 30,
                     ),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut accumsan augue. Morbi fringilla pharetra dui at tincidunt. Nullam vitae lectus est. Mauris euismod, odio sed facilisis maximus, risus eros dictum est, id interdum erat magna non nisi. Nam ornare, enim eu rutrum rutrum, lacus magna tincidunt justo, consectetur vestibulum risus elit non mi. In lobortis tortor vel leo consectetur, fermentum cursus orci vestibulum. ",
+                      widget.shopDescription,
                       textAlign: TextAlign.justify,
                     ),
                   ),
@@ -225,8 +231,8 @@ class _MyAppState extends State<MyApp> {
                                         Icons.phone,
                                         color: Colors.grey.shade400,
                                       ),
-                                      onPressed: () =>
-                                          launch("tel://21213123123"),
+                                      onPressed: () => launch(
+                                          'tel://${widget.shopContactNumber}'),
                                     ),
                                   ),
                                 ),
@@ -252,8 +258,8 @@ class _MyAppState extends State<MyApp> {
                                         Icons.location_on,
                                         color: Colors.grey.shade400,
                                       ),
-                                      onPressed: () =>
-                                          MapUtils.navigateTo(47.6, -122.3),
+                                      onPressed: () => MapsLauncher.launchQuery(
+                                          widget.shopAddress),
                                     ),
                                   ),
                                 ),
@@ -279,16 +285,26 @@ class _MyAppState extends State<MyApp> {
                                         'Book Now',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      onPressed: () => {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return SelectDayDate();
-                                            },
-                                          ),
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MainPage(
+                                                shopAddress: widget.shopAddress,
+                                                shopClosingTime:
+                                                    widget.shopClosingTime,
+                                                shopContactNumber:
+                                                    widget.shopContactNumber,
+                                                shopDescription:
+                                                    widget.shopDescription,
+                                                shopId: widget.shopId,
+                                                shopName: widget.shopName,
+                                                shopOpeningTime:
+                                                    widget.shopOpeningTime,
+                                                vendorId: widget.vendorId);
+                                          },
                                         ),
-                                      },
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -306,16 +322,5 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-  }
-}
-
-class MapUtils {
-  static void navigateTo(double lat, double lng) async {
-    var uri = Uri.parse("google.navigation:q=$lat,$lng&mode=d");
-    if (await canLaunch(uri.toString())) {
-      await launch(uri.toString());
-    } else {
-      throw 'Could not launch ${uri.toString()}';
-    }
   }
 }

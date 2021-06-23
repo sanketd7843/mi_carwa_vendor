@@ -1,183 +1,221 @@
+import 'package:mi_carwa_vendor/components/rounded_button.dart';
+import 'package:mi_carwa_vendor/screens/SelectAddressScreen/select_address_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mi_carwa_vendor/constants.dart';
 
-import 'package:mi_carwa_vendor/model/transaction_model.dart';
-import 'package:mi_carwa_vendor/screens/DetailScreen/detail_screen.dart';
-import 'package:mi_carwa_vendor/screens/SelectDayDateScreen/widget/date_time_picker_widget.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(SelectDayDate());
 
-class SelectDayDate extends StatelessWidget {
+class SelectDayDate extends StatefulWidget {
+  @override
+  _SelectDayDateState createState() => _SelectDayDateState();
+}
+
+class _SelectDayDateState extends State<SelectDayDate> {
   final String appTitle = 'Book Your Slot';
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: appTitle,
-        home: MainPage(appTitle: appTitle),
+        home: MainPage(),
       );
 }
 
-class MainPage extends StatelessWidget {
-  final String appTitle;
+class MainPage extends StatefulWidget {
+  final String shopName;
+  final String shopId;
+  final String shopAddress;
+  final String shopContactNumber;
+  final String shopOpeningTime;
+  final String shopClosingTime;
+  final String shopDescription;
+  final String vendorId;
+  final String dateTime;
 
-  const MainPage({this.appTitle});
+  const MainPage(
+      {Key key,
+      this.shopName,
+      this.shopId,
+      this.shopAddress,
+      this.shopContactNumber,
+      this.shopOpeningTime,
+      this.shopClosingTime,
+      this.shopDescription,
+      this.vendorId,
+      this.dateTime})
+      : super(key: key);
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Stack(
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  colors: [kPrimaryColor, kPrimaryColor, kPrimaryColor])),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Max Size
+              SizedBox(
+                height: 80,
+              ),
               Padding(
-                padding: EdgeInsets.only(top: 350.0),
-                child: Container(
-                  height: h * 1,
-                  width: w * 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 250.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  30.0,
-                                  20.0,
-                                  30.0,
-                                  20.0,
-                                ),
-                                child: Text(
-                                  'Proceed',
-                                  style: TextStyle(fontSize: 25.0),
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                primary: kPrimaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(22), // <-- Radius
-                                ),
-                              ),
-                            ))
-                      ],
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Select",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
+                    Text(
+                      "Date and Time",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 16, top: 140.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: new LinearGradient(
-                          colors: [
-                            kpurpleColor,
-                            kpurpleColor,
-                          ],
-                          begin: const FractionalOffset(0.0, 1.0),
-                          end: const FractionalOffset(1.0, 1.0),
-                          stops: [0.0, 1.0],
-                          tileMode: TileMode.clamp),
-                      borderRadius: BorderRadius.circular(80),
-                      boxShadow: [
-                        BoxShadow(
-                          color: kTenBlackColor,
-                          blurRadius: 15,
-                          spreadRadius: 2,
-                          offset: Offset(0.0, 8.0),
-                        )
-                      ],
-                    ),
-                    child: Center(
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(60),
+                          topRight: Radius.circular(60))),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(30),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Book Your Slot",
-                            style: GoogleFonts.inter(
-                                fontSize: h * 0.029,
-                                fontWeight: FontWeight.w700,
-                                color: kWhiteColor),
+                        children: <Widget>[
+                          SizedBox(
+                            height: 20,
                           ),
-                          Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        20.0,
-                                        10.0,
-                                        20.0,
-                                        10.0,
-                                      ),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Center(
                                       child: Text(
-                                        'Select Date Time',
-                                        style: TextStyle(fontSize: 15.0),
+                                        "Book Your Slot",
+                                        style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: kPrimaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            22), // <-- Radius
-                                      ),
+                                    Image.asset(
+                                      "assets/Calendarphoto.png",
+                                      height: h * 0.31,
                                     ),
-                                  ))),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Center(
+                                          child: Text(
+                                            "${DateFormat.yMMMMd().format(selectedDate)} \n" +
+                                                "${DateFormat.jm().format(selectedDate)}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: kPrimaryColor,
+                                                fontSize: 30.0),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 60,
+                                        ),
+                                        RoundedButton(
+                                          text: "Select Date and Time",
+                                          color: kPrimaryLightColor,
+                                          textColor: Colors.black,
+                                          press: () async {
+                                            final selectedDate =
+                                                await _selectDateTime(context);
+                                            if (selectedDate == null) return;
+
+                                            print(selectedDate);
+
+                                            final selectedTime =
+                                                await _selectTime(context);
+                                            if (selectedTime == null) return;
+                                            print(selectedTime);
+
+                                            setState(() {
+                                              this.selectedDate = DateTime(
+                                                selectedDate.year,
+                                                selectedDate.month,
+                                                selectedDate.day,
+                                                selectedTime.hour,
+                                                selectedTime.minute,
+                                              );
+                                            });
+                                          },
+                                        ),
+                                        RoundedButton(
+                                          text: "Next",
+                                          color: kPrimaryColor,
+                                          textColor: Colors.white,
+                                          press: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return SelectAddressScreen(
+                                                      shopAddress:
+                                                          widget.shopAddress,
+                                                      shopClosingTime:
+                                                          widget.shopAddress,
+                                                      shopContactNumber:
+                                                          widget.shopAddress,
+                                                      shopDescription: widget
+                                                          .shopDescription,
+                                                      shopId: widget.shopId,
+                                                      shopName: widget.shopName,
+                                                      shopOpeningTime:
+                                                          widget.shopAddress,
+                                                      vendorId: widget.vendorId,
+                                                      dateTime:
+                                                          "${DateFormat.yMMMMd().format(selectedDate)} \n" +
+                                                              "${DateFormat.jm().format(selectedDate)}");
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
-                    // Yellow
-                    height: 350.0,
-                    width: w * 0.89,
                   ),
                 ),
-              ),
-              Center(
-                child: Container(
-                  height: h * 0.33,
-                  width: w * 0.7,
-                  child: Padding(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/Calendar.png'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                // Yellow
-                                height: 230.0,
-                                width: w * 0.7,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.only(bottom: 16),
-                  ),
-                ),
-              ),
+              )
             ],
           ),
         ),
@@ -185,3 +223,19 @@ class MainPage extends StatelessWidget {
     );
   }
 }
+
+Future<TimeOfDay> _selectTime(BuildContext context) {
+  final now = DateTime.now();
+
+  return showTimePicker(
+    context: context,
+    initialTime: TimeOfDay(hour: now.hour, minute: now.minute),
+  );
+}
+
+Future<DateTime> _selectDateTime(BuildContext context) => showDatePicker(
+      context: context,
+      initialDate: DateTime.now().add(Duration(seconds: 1)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );

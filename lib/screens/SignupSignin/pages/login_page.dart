@@ -1,9 +1,9 @@
 import 'package:mi_carwa_vendor/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/pages/widgets/sign_in.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/pages/widgets/sign_up.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/theme.dart';
-import 'package:mi_carwa_vendor/Screens/SignupSignin/utils/bubble_indicator_painter.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/pages/widgets/sign_in.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/pages/widgets/sign_up.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/theme.dart';
+import 'package:mi_carwa_vendor/screens/SignupSignin/utils/bubble_indicator_painter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -14,7 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
+  //EmailPasswordController
   PageController _pageController;
+
+  final myController = TextEditingController();
 
   Color left = Colors.white;
   Color right = Colors.white;
@@ -22,6 +25,8 @@ class _LoginPageState extends State<LoginPage>
   @override
   void dispose() {
     _pageController?.dispose();
+    myController.dispose();
+
     super.dispose();
   }
 
@@ -43,16 +48,8 @@ class _LoginPageState extends State<LoginPage>
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: <Color>[CustomTheme.white, CustomTheme.white],
-                begin: FractionalOffset(0.0, 0.0),
-                end: FractionalOffset(1.0, 1.0),
-                stops: <double>[0.0, 1.0],
-                tileMode: TileMode.clamp),
-          ),
+          color: Colors.white,
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 75.0),
@@ -64,7 +61,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 0.0),
                 child: _buildMenuBar(context),
               ),
               Expanded(

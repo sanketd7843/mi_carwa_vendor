@@ -1,4 +1,4 @@
-package com.example.mi_carwa_vendor
+package com.micarwa.user
 
 import io.flutter.embedding.android.FlutterActivity
 

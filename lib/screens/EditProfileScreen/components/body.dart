@@ -23,21 +23,6 @@ class Body extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.settings, color: kWhiteColor),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return HomeScreen();
-                        },
-                      ),
-                    );
-                  },
-                ), // overflow menu
-              ],
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(50),
                 child: Container(

@@ -1,20 +1,51 @@
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:mi_carwa_vendor/constants/apiUrls.dart';
+import 'package:mi_carwa_vendor/models/allOrdersModel/allOrdersModel.dart';
+import 'package:mi_carwa_vendor/screens/ReferAndEarn/refer_and_earn.dart';
 import 'package:mi_carwa_vendor/constants.dart';
-import 'package:mi_carwa_vendor/model/transaction_model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mi_carwa_vendor/screens/ReferAndEarn/refer_and_earn.dart';
 
-class Body extends StatefulWidget {
+class CancelledScreenBody extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _CancelledScreenBodyState createState() => _CancelledScreenBodyState();
 }
 
-class _HomeScreenState extends State<Body> {
+class _CancelledScreenBodyState extends State<CancelledScreenBody> {
   // Current selected
   int current = 0;
+  List<AllOrdersData> dataFetched = [];
+  bool isLoading = true;
+
+  Future<allOrdersModel> getOrders() async {
+    log("hello");
+    try {
+      FormData formData = FormData.fromMap(
+          {"api_key": apiUrls.apiKey, "vendor_id": "1", "order_status": "3"});
+      Response resp = await Dio().post(apiUrls.fetchAllOrders, data: formData);
+      allOrdersModel u = allOrdersModel.fromJson(json.decode(resp.data));
+      log("ffe" + u.response + u.message);
+      isLoading = false;
+      if (u.response == "200") {
+        if (mounted)
+          setState(() {
+            dataFetched = u.data;
+            isLoading = false;
+          });
+      } else {
+        dataFetched = [];
+        isLoading = false;
+      }
+    } on DioError catch (e) {
+      log(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +55,18 @@ class _HomeScreenState extends State<Body> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.only(top: 8),
           child: ListView(
             physics: ClampingScrollPhysics(),
             children: <Widget>[
+              isLoading == true
+                  ? Container(
+                      width: w,
+                      height: h,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 168.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      ))
+                  : Container(),
               // Custom AppBar
               // Card Section
               SizedBox(
@@ -35,8 +74,8 @@ class _HomeScreenState extends State<Body> {
               ),
 
               ListView.builder(
-                itemCount: transactions.length,
-                padding: EdgeInsets.only(top: 10.0, right: 16),
+                itemCount: dataFetched.length,
+                padding: EdgeInsets.only(top: 10.0, right: 16, left: 16),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -88,8 +127,7 @@ class _HomeScreenState extends State<Body> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                    image: AssetImage(
-                                        transactions[index].contactNumber),
+                                    image: AssetImage('assets/images/car.png'),
                                   ),
                                 ),
                               ),
@@ -103,7 +141,8 @@ class _HomeScreenState extends State<Body> {
                                 padding: const EdgeInsets.fromLTRB(
                                     1.0, 1.0, 1.0, 4.0),
                                 child: Text(
-                                  transactions[index].name,
+                                  dataFetched[index].firstname +
+                                      dataFetched[index].lastname,
                                   style: GoogleFonts.inter(
                                       fontSize: h * 0.024,
                                       fontWeight: FontWeight.w800,
@@ -124,7 +163,7 @@ class _HomeScreenState extends State<Body> {
                                 padding: const EdgeInsets.fromLTRB(
                                     1.0, 1.0, 1.0, 4.0),
                                 child: Text(
-                                  "Cancelled On - 14 April 2021",
+                                  "Cancelled On - ${dataFetched[index].createdAt.substring(0, 10)}",
                                   style: GoogleFonts.inter(
                                       fontSize: h * 0.014,
                                       fontWeight: FontWeight.w700,
@@ -145,6 +184,11 @@ class _HomeScreenState extends State<Body> {
       ),
     );
   }
+
+  @override
+  void initState() {
+    getOrders();
+  }
 }
 
 class OperationCard extends StatefulWidget {
@@ -152,7 +196,7 @@ class OperationCard extends StatefulWidget {
   final String selectedIcon;
   final String unselectedIcon;
   final bool isSelected;
-  _HomeScreenState context;
+  _CancelledScreenBodyState context;
 
   OperationCard(
       {this.operation,
